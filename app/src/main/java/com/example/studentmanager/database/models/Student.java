@@ -1,8 +1,7 @@
-package com.example.studentmanager.models;
+package com.example.studentmanager.database.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 

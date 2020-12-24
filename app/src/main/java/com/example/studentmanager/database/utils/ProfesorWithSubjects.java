@@ -1,10 +1,10 @@
-package com.example.studentmanager.utils;
+package com.example.studentmanager.database.utils;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import com.example.studentmanager.models.Profesor;
-import com.example.studentmanager.models.Subject;
+import com.example.studentmanager.database.models.Profesor;
+import com.example.studentmanager.database.models.Subject;
 
 import java.util.List;
 

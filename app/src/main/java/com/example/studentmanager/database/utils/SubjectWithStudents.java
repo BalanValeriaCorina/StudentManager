@@ -1,12 +1,12 @@
-package com.example.studentmanager.utils;
+package com.example.studentmanager.database.utils;
 
 import androidx.room.Embedded;
 import androidx.room.Junction;
 import androidx.room.Relation;
 
-import com.example.studentmanager.models.Student;
-import com.example.studentmanager.models.StudentSubjectCrossRef;
-import com.example.studentmanager.models.Subject;
+import com.example.studentmanager.database.models.Student;
+import com.example.studentmanager.database.models.StudentSubjectCrossRef;
+import com.example.studentmanager.database.models.Subject;
 
 import java.util.List;
 
