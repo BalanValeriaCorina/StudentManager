@@ -26,6 +26,13 @@ public class Subject {
         this.idProfesorSubject = idProfesorSubject;
     }
 
+    public int getIdProfesorSubject() {
+        return idProfesorSubject;
+    }
+
+    public void setIdProfesorSubject(int idProfesorSubject) {
+        this.idProfesorSubject = idProfesorSubject;
+    }
 
     public Date getSubjectDateExam() {
         return subjectDateExam;

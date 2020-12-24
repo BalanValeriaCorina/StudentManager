@@ -15,8 +15,8 @@ public class SubjectWithStudents {
     @Embedded
     public Subject subject;
     @Relation(
-            parentColumn = "IdSubject",
-            entityColumn = "IdStud",
+            parentColumn = "idSubject",
+            entityColumn = "idStud",
             associateBy = @Junction(StudentSubjectCrossRef.class)
     )
     public List<Student> students;

@@ -1,17 +1,22 @@
 package com.example.studentmanager.database.models;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 @Entity(primaryKeys = {"idStud", "idSubject"}, tableName = "studentSubjectCross")
 public class StudentSubjectCrossRef {
+
+    @ColumnInfo(name = "idStud")
     private int idStud;
+    @ColumnInfo(name = "idSubject")
     private int idSubject;
+    @ColumnInfo(name = "grade")
     private double grade;
 
 
-    public StudentSubjectCrossRef(int IdStud, int IdSubject, double grade) {
-        idStud = IdStud;
-        idSubject = IdSubject;
+    public StudentSubjectCrossRef(int idStud, int idSubject, double grade) {
+        idStud = idStud;
+        idSubject = idSubject;
         this.grade = grade;
     }
 

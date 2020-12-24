@@ -14,8 +14,9 @@ import com.example.studentmanager.database.models.Profesor;
 import com.example.studentmanager.database.models.Student;
 import com.example.studentmanager.database.models.StudentSubjectCrossRef;
 import com.example.studentmanager.database.models.Subject;
+import com.example.studentmanager.database.utils.DateConverter;
 
-
+@TypeConverters({DateConverter.class})
 @Database(entities={Student.class, Subject.class, StudentSubjectCrossRef.class, Profesor.class},exportSchema = false,version = 1)
 public abstract class DatabaseManager extends RoomDatabase {
 
