@@ -23,21 +23,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         profesorRepository=new ProfesorRepository(this);
-
+        Profesor profesor = new Profesor("prof@prof.com", "Prof Test", 1234);
+        insert(profesor);
 
     }
 
 
-    public void  insert() {
-        Callable<List<Profesor>> callable=new Callable<List<Profesor>>() {
+    public void  insert(Profesor p) {
+        Callable<Long> callable=new Callable<Long>() {
             @Override
-            public List<Profesor> call() throws Exception {
-                return profesorRepository.getAll();
+            public Long call() throws Exception {
+                return profesorRepository.insert(p);
             }
         };
-        Callback<List<Profesor>> callback=new Callback<List<Profesor>>() {
+        Callback<Long> callback=new Callback<Long>() {
             @Override
-            public void runResultOnUIThread(List<Profesor> result) {
+            public void runResultOnUIThread(Long result) {
                 Toast.makeText(getApplicationContext(),result.toString(),Toast.LENGTH_LONG).show();
 
             }

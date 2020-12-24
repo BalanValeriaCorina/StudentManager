@@ -2,6 +2,7 @@ package com.example.studentmanager.database.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -17,6 +18,14 @@ public class Profesor {
     private String nameProfesor;
     @ColumnInfo(name = "accessCode")
     private int accessCode;
+
+    @Ignore
+    public Profesor(String emailProfesor, String nameProfesor, int accessCode) {
+        this.emailProfesor = emailProfesor;
+        this.nameProfesor = nameProfesor;
+        this.accessCode = accessCode;
+    }
+
 
     public Profesor(int idProfesor, String emailProfesor, String nameProfesor, int accessCode) {
         this.idProfesor = idProfesor;
