@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profesor_role_button">Professor</string>
     <string name="student_role_button">Student</string>
+    <string name="registration_button">Registration</string>
+    <string name="login_button">Login</string>
 </resources>
