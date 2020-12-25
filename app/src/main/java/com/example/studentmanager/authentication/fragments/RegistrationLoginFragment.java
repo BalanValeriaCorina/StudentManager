@@ -5,10 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.studentmanager.R;
@@ -18,6 +20,7 @@ public class RegistrationLoginFragment extends Fragment {
 
     private static final String ROLE = "role";
     private String role;
+    private Button loginbutton;
     public RegistrationLoginFragment() {
     }
 
@@ -50,6 +53,15 @@ public class RegistrationLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        loginbutton=view.findViewById(R.id.login_button);
+        loginbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("role",role);
+                Navigation.findNavController(view).navigate(R.id.loginFragment,bundle);
+            }
+        });
         Toast.makeText(getContext(),this.role,Toast.LENGTH_LONG).show();
     }
 

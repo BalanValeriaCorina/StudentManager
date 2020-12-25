@@ -11,35 +11,30 @@ import android.view.ViewGroup;
 import com.example.studentmanager.R;
 
 
-public class LoginFragment extends Fragment {
+public class ProfesorRegistrationFragment extends Fragment {
 
-    private static final String ROLE = "role";
-    private String role;
 
-    public LoginFragment() {
+    public ProfesorRegistrationFragment() {
         // Required empty public constructor
     }
 
 
-    public static LoginFragment newInstance(String role) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ROLE, role);
-        fragment.setArguments(args);
+    public static ProfesorRegistrationFragment newInstance() {
+        ProfesorRegistrationFragment fragment = new ProfesorRegistrationFragment();
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null)
-            this.role=getArguments().getString(ROLE);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_profesor_registration, container, false);
     }
 }

@@ -18,5 +18,14 @@
         android:id="@+id/registrationLoginFragment"
         android:name="com.example.studentmanager.authentication.fragments.RegistrationLoginFragment"
         android:label="fragment_registration_login"
-        tools:layout="@layout/fragment_registration_login" />
+        tools:layout="@layout/fragment_registration_login" >
+        <action
+            android:id="@+id/action_registrationLoginFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.studentmanager.authentication.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>
