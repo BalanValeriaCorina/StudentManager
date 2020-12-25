@@ -9,4 +9,6 @@
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="save_login_button">Login</string>
+    <string name="name">Name</string>
+    <string name="signup_button">Signup</string>
 </resources>

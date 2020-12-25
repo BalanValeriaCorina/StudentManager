@@ -22,10 +22,18 @@
         <action
             android:id="@+id/action_registrationLoginFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registrationLoginFragment_to_profesorRegistrationFragment"
+            app:destination="@id/profesorRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.studentmanager.authentication.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/profesorRegistrationFragment"
+        android:name="com.example.studentmanager.authentication.fragments.ProfesorRegistrationFragment"
+        android:label="fragment_profesor_registration"
+        tools:layout="@layout/fragment_profesor_registration" />
 </navigation>
