@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -21,10 +23,15 @@ public class MainActivity extends FragmentActivity {
     ProfesorRepository profesorRepository;
     private final AsyncTaskRunner taskRunner=new AsyncTaskRunner();
     Fragment fragmentRoleChoser= RoleChoserFragment.newInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 //        profesorRepository=new ProfesorRepository(this);
 //        Profesor profesor = new Profesor("prof@prof.com", "Prof Test", 1234);
 //        insert(profesor);

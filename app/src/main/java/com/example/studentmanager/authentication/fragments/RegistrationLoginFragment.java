@@ -21,6 +21,8 @@ public class RegistrationLoginFragment extends Fragment {
     private static final String ROLE = "role";
     private String role;
     private Button loginbutton;
+    private Button registerbutton;
+
     public RegistrationLoginFragment() {
     }
 
@@ -60,6 +62,18 @@ public class RegistrationLoginFragment extends Fragment {
                 Bundle bundle=new Bundle();
                 bundle.putString("role",role);
                 Navigation.findNavController(view).navigate(R.id.loginFragment,bundle);
+            }
+        });
+        registerbutton=view.findViewById(R.id.registration_button);
+        registerbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(role.equals("professor"))
+                    Navigation.findNavController(view).navigate(R.id.profesorRegistrationFragment,null);
+                else
+                {
+                    Navigation.findNavController(view).navigate(R.id.studentRegistrationFragment,null);
+                }
             }
         });
         Toast.makeText(getContext(),this.role,Toast.LENGTH_LONG).show();

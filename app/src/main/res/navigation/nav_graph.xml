@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_registrationLoginFragment_to_profesorRegistrationFragment"
             app:destination="@id/profesorRegistrationFragment" />
+        <action
+            android:id="@+id/action_registrationLoginFragment_to_studentRegistrationFragment"
+            app:destination="@id/studentRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -36,4 +39,9 @@
         android:name="com.example.studentmanager.authentication.fragments.ProfesorRegistrationFragment"
         android:label="fragment_profesor_registration"
         tools:layout="@layout/fragment_profesor_registration" />
+    <fragment
+        android:id="@+id/studentRegistrationFragment"
+        android:name="com.example.studentmanager.authentication.fragments.StudentRegistrationFragment"
+        android:label="fragment_student_registration"
+        tools:layout="@layout/fragment_student_registration" />
 </navigation>

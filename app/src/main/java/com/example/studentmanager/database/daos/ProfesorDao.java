@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.studentmanager.database.models.Profesor;
+import com.example.studentmanager.database.models.Student;
 import com.example.studentmanager.database.utils.ProfesorWithSubjects;
 
 import java.util.List;
@@ -31,5 +32,8 @@ public interface ProfesorDao {
     @Transaction
     @Query("select * from profesors")
     List<ProfesorWithSubjects> getAllProfesorWithSubjects();
+
+    @Query("select * from profesors where emailProfesor=:email")
+    Profesor getProfesor(String email);
 
 }

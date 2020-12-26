@@ -11,4 +11,9 @@
     <string name="save_login_button">Login</string>
     <string name="name">Name</string>
     <string name="signup_button">Signup</string>
+    <string name="registration_number">Registration Number</string>
+    <string name="budget">Budget</string>
+    <string name="tax">Tax</string>
+    <string name="group_number">Group Number</string>
+    <string name="remember_me">Remember Me</string>
 </resources>

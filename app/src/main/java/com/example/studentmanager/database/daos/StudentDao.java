@@ -26,4 +26,7 @@ public interface StudentDao {
 
     @Delete
     int delete(Student student);
+
+    @Query("select * from students where emailStudent=:email")
+    Student getStudent(String email);
 }

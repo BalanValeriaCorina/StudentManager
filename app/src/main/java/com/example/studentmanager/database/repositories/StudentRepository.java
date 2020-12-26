@@ -32,6 +32,13 @@ public class StudentRepository {
         this.taskRunner = new AsyncTaskRunner();
     }
 
+
+    public Student getStudent(String email)//extracts a single student from db
+    {
+        return studentDao.getStudent(email);
+    }
+
+
 //    public void  getAll() {
 //        Callable<List<Student>> callable=new Callable<List<Student>>() {
 //            @Override

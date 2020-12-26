@@ -26,6 +26,10 @@ public class ProfesorRepository {
         this.taskRunner = new AsyncTaskRunner();
     }
 
+    public Profesor getProfesor(String email)
+    {
+        return profesorDao.getProfesor(email);
+    }
 //    public void  getAll() {
 //        Callable<List<Profesor>> callable=new Callable<List<Profesor>>() {
 //            @Override
