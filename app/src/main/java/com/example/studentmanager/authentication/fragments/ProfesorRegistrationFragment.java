@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.studentmanager.R;
 import com.example.studentmanager.async.AsyncTaskRunner;
 import com.example.studentmanager.async.Callback;
+import com.example.studentmanager.database.models.Diploma;
 import com.example.studentmanager.database.models.Profesor;
 import com.example.studentmanager.database.repositories.ProfesorRepository;
 
@@ -30,6 +31,7 @@ public class ProfesorRegistrationFragment extends Fragment {
 
     ProfesorRepository profesorRepository;
     private final AsyncTaskRunner taskRunner=new AsyncTaskRunner();
+    Diploma diploma=new Diploma("Informatics",10);
 
         private EditText profesorName;
         private EditText profesorEmail;
@@ -90,7 +92,7 @@ public class ProfesorRegistrationFragment extends Fragment {
             md.update(password.getBytes(StandardCharsets.UTF_8));
             byte[] digest=md.digest();//will create the hash and put it into a byte array
             String hashedPassword=String.format("%064x",new BigInteger(1,digest));
-            Profesor newprofesor=new Profesor(email,name,hashedPassword);
+            Profesor newprofesor=new Profesor(email,name,hashedPassword,diploma);
 
             Callable<Long> callable=new Callable<Long>() {
                 @Override

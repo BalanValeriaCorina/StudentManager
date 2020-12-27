@@ -17,7 +17,7 @@ import com.example.studentmanager.database.models.Subject;
 import com.example.studentmanager.database.utils.DateConverter;
 
 @TypeConverters({DateConverter.class})
-@Database(entities={Student.class, Subject.class, StudentSubjectCrossRef.class, Profesor.class},exportSchema = false,version = 3)
+@Database(entities={Student.class, Subject.class, StudentSubjectCrossRef.class, Profesor.class},exportSchema = false,version = 6)
 public abstract class DatabaseManager extends RoomDatabase {
 
     public static final String DAM_DB="dam_db";

@@ -3,11 +3,12 @@ package com.example.studentmanager.database.models;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "subjects")
+@Entity(tableName = "subjects",indices = {@Index(value = {"subjectName"},unique = true)})
 public class Subject {
 
     @PrimaryKey(autoGenerate = true)
@@ -19,19 +20,39 @@ public class Subject {
     private Date subjectDateExam;
     @ColumnInfo(name = "idProfesorSubject")
     private int idProfesorSubject;
+    @ColumnInfo(name = "numberOfTests")
+    private int numberOfTests;
+
 
     @Ignore
-    public Subject(String subjectName, Date subjectDateExam, int idProfesorSubject) {
+    public Subject(String subjectName, Date subjectDateExam, int numberOfTests) {
         this.subjectName = subjectName;
         this.subjectDateExam = subjectDateExam;
-        this.idProfesorSubject = idProfesorSubject;
+        this.numberOfTests = numberOfTests;
     }
 
-    public Subject(int idSubject, String subjectName, Date subjectDateExam, int idProfesorSubject) {
+    public Subject(int idSubject, String subjectName, Date subjectDateExam, int idProfesorSubject, int numberOfTests) {
         this.idSubject = idSubject;
         this.subjectName = subjectName;
         this.subjectDateExam = subjectDateExam;
         this.idProfesorSubject = idProfesorSubject;
+        this.numberOfTests = numberOfTests;
+    }
+
+    @Ignore
+    public Subject(String subjectName, Date subjectDateExam, int idProfesorSubject, int numberOfTests) {
+        this.subjectName = subjectName;
+        this.subjectDateExam = subjectDateExam;
+        this.idProfesorSubject = idProfesorSubject;
+        this.numberOfTests = numberOfTests;
+    }
+
+    public int getNumberOfTests() {
+        return numberOfTests;
+    }
+
+    public void setNumberOfTests(int numberOfTests) {
+        this.numberOfTests = numberOfTests;
     }
 
     public int getIdProfesorSubject() {
@@ -73,6 +94,7 @@ public class Subject {
                 ", subjectName='" + subjectName + '\'' +
                 ", subjectDateExam=" + subjectDateExam +
                 ", idProfesorSubject=" + idProfesorSubject +
+                ", numberOfTests=" + numberOfTests +
                 '}';
     }
 }

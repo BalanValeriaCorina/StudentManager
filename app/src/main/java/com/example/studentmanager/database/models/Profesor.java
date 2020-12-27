@@ -1,6 +1,7 @@
 package com.example.studentmanager.database.models;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -18,21 +19,33 @@ public class Profesor {
     private String nameProfesor;
     @ColumnInfo(name = "password")
     private String password;
+    @Embedded
+    private Diploma diploma;
 
-    @Ignore
-    public Profesor(String emailProfesor, String nameProfesor, String password) {
-        this.emailProfesor = emailProfesor;
-        this.nameProfesor = nameProfesor;
-        this.password = password;
+    public Diploma getDiploma() {
+        return diploma;
     }
 
+    public void setDiploma(Diploma diploma) {
+        this.diploma = diploma;
+    }
 
-    public Profesor(int idProfesor, String emailProfesor, String nameProfesor, String password) {
+    public Profesor(int idProfesor, String emailProfesor, String nameProfesor, String password, Diploma diploma) {
         this.idProfesor = idProfesor;
         this.emailProfesor = emailProfesor;
         this.nameProfesor = nameProfesor;
         this.password = password;
+        this.diploma = diploma;
     }
+
+    @Ignore
+    public Profesor(String emailProfesor, String nameProfesor, String password, Diploma diploma) {
+        this.emailProfesor = emailProfesor;
+        this.nameProfesor = nameProfesor;
+        this.password = password;
+        this.diploma = diploma;
+    }
+
 
     public int getIdProfesor() {
         return idProfesor;
