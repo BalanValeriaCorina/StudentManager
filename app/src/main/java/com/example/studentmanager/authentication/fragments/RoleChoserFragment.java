@@ -1,6 +1,7 @@
 package com.example.studentmanager.authentication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.studentmanager.ProfesorProfileActivity;
 import com.example.studentmanager.R;
+import com.example.studentmanager.StudentProfileActivity;
+import com.example.studentmanager.database.models.Profesor;
 
 
 public class RoleChoserFragment extends Fragment {
@@ -54,9 +58,27 @@ public class RoleChoserFragment extends Fragment {
         sharedpref=getActivity().getSharedPreferences(SHARED_PREF_FILE_NAME, Context.MODE_PRIVATE);
         String email=sharedpref.getString(EMAIL,"");
         String password=sharedpref.getString(PASSWORD,"");
-        if(!email.equals("") && !password.equals(""))
+        String role=sharedpref.getString("role","");
+        if(!email.equals("") && !password.equals("") && !role.equals(""))
         {
-            Toast.makeText(getContext(),"Automatic login",Toast.LENGTH_LONG).show();
+           if(role.equals("student"))
+           {
+               Intent studintent=new Intent(getContext(),StudentProfileActivity.class);
+               Bundle bundlenou=new Bundle();
+               bundlenou.putString("email",email);
+               studintent.putExtras(bundlenou);
+               startActivity(studintent);
+               getActivity().finish();
+           }
+           else
+           {
+               Intent profintent=new Intent(getContext(), ProfesorProfileActivity.class);
+               Bundle bundlenou=new Bundle();
+               bundlenou.putString("email",email);
+               profintent.putExtras(bundlenou);
+               startActivity(profintent);
+               getActivity().finish();
+           }
 
         }
 

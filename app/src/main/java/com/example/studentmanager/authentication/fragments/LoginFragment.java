@@ -1,6 +1,7 @@
 package com.example.studentmanager.authentication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,7 +18,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.studentmanager.ProfesorProfileActivity;
 import com.example.studentmanager.R;
+import com.example.studentmanager.StudentProfileActivity;
 import com.example.studentmanager.async.AsyncTaskRunner;
 import com.example.studentmanager.async.Callback;
 import com.example.studentmanager.database.models.Profesor;
@@ -107,11 +110,14 @@ public class LoginFragment extends Fragment {
                            else
                                if(result.getPasswordStudent().equals(hashedPassword))
                                {
-                                   Toast.makeText(getContext(),"Authentication successful",Toast.LENGTH_LONG).show();
+
                                    if(checked==true)
                                    {
                                        saveLoginCredentialsToSharedPref(email,hashedPassword);
                                    }
+                                   Intent intent=new Intent(getContext(), StudentProfileActivity.class);
+                                   startActivity(intent);
+                                   getActivity().finish();
                                }
                                else
                                {
@@ -142,11 +148,14 @@ public class LoginFragment extends Fragment {
                             else
                             if(result.getPassword().equals(hashedPassword))
                             {
-                                Toast.makeText(getContext(),"Authentication successful",Toast.LENGTH_LONG).show();
+
                                 if(checked)
                                 {
                                     saveLoginCredentialsToSharedPref(email,hashedPassword);
                                 }
+                                Intent intent=new Intent(getContext(), ProfesorProfileActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
                             }
                             else
                             {
@@ -168,6 +177,7 @@ private void saveLoginCredentialsToSharedPref(String email, String parola)
     SharedPreferences.Editor editor=preferences.edit();
     editor.putString(EMAIL,email);
     editor.putString(PASSWORD,parola);
+    editor.putString("role",role);
     editor.apply();
 
 }

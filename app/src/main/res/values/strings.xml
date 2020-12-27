@@ -16,4 +16,6 @@
     <string name="tax">Tax</string>
     <string name="group_number">Group Number</string>
     <string name="remember_me">Remember Me</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

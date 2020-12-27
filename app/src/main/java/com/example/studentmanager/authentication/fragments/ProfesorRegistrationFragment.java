@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,7 @@ public class ProfesorRegistrationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                     if(validate()==true)
-                        insertProfessorintoDatabase();
+                        insertProfessorintoDatabase(v);
 
             }
         });
@@ -81,7 +82,7 @@ public class ProfesorRegistrationFragment extends Fragment {
         return true;
     }
 
-    private void insertProfessorintoDatabase()
+    private void insertProfessorintoDatabase(View v)
     {
         String name=profesorName.getText().toString();
         String email=profesorEmail.getText().toString();
@@ -103,7 +104,9 @@ public class ProfesorRegistrationFragment extends Fragment {
             Callback<Long> callback=new Callback<Long>() {
                 @Override
                 public void runResultOnUIThread(Long result) {
-                    Toast.makeText(getContext(),result.toString(),Toast.LENGTH_LONG).show();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("role","professor");
+                    Navigation.findNavController(v).navigate(R.id.loginFragment,bundle);
 
                 }
             };
