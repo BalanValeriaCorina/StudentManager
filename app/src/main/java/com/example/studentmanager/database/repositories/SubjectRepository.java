@@ -59,5 +59,9 @@ public class SubjectRepository {
         return studentSubjectCrossrefDao.getStudentWithSubjects();
     }
 
+    public List<Subject> getProfesorSubjects(int id)
+    {
+        return subjectDao.getProfesorSubjects(id);
+    }
 
 }

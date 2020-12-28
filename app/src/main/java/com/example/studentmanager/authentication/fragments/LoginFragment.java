@@ -116,6 +116,9 @@ public class LoginFragment extends Fragment {
                                        saveLoginCredentialsToSharedPref(email,hashedPassword);
                                    }
                                    Intent intent=new Intent(getContext(), StudentProfileActivity.class);
+                                   Bundle bundle=new Bundle();
+                                   bundle.putString("email",email);
+                                   intent.putExtras(bundle);
                                    startActivity(intent);
                                    getActivity().finish();
                                }
@@ -154,6 +157,9 @@ public class LoginFragment extends Fragment {
                                     saveLoginCredentialsToSharedPref(email,hashedPassword);
                                 }
                                 Intent intent=new Intent(getContext(), ProfesorProfileActivity.class);
+                                Bundle bundle=new Bundle();
+                                bundle.putString("email",email);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                                 getActivity().finish();
                             }

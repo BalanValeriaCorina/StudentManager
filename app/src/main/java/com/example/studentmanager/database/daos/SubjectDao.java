@@ -24,4 +24,7 @@ public interface SubjectDao {
 
     @Delete
     int delete(Subject subject);
+
+    @Query("select * from subjects where idProfesorSubject=:id")
+    List<Subject> getProfesorSubjects(int id);
 }

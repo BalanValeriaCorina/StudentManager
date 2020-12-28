@@ -18,4 +18,6 @@
     <string name="remember_me">Remember Me</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="log_out">Log out</string>
+    <string name="delete_profile">Delete Profile</string>
 </resources>

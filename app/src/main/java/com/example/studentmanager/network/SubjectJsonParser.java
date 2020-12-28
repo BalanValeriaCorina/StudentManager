@@ -8,6 +8,11 @@ import com.example.studentmanager.database.utils.DateConverter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +90,18 @@ public class SubjectJsonParser {
         String pass=object.getString(PASSWORD);
         JSONObject diplomaobject=object.getJSONObject("diploma");
         Diploma d=new Diploma(diplomaobject.getString("name"),diplomaobject.getInt("grade"));
-        return new Profesor(emailProfesor,nameProfesor,pass,d);
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(pass.getBytes(StandardCharsets.UTF_8));
+        byte[] digest=md.digest();//will create the hash and put it into a byte array
+        String hashedPassword=String.format("%064x",new BigInteger(1,digest));
+
+
+        return new Profesor(emailProfesor,nameProfesor,hashedPassword,d);
     }
 
 
