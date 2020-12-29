@@ -21,7 +21,11 @@ import com.example.studentmanager.async.AsyncTaskRunner;
 import com.example.studentmanager.async.Callback;
 import com.example.studentmanager.database.models.Profesor;
 import com.example.studentmanager.database.models.Student;
+import com.example.studentmanager.database.models.StudentSubjectCrossRef;
+import com.example.studentmanager.database.models.Subject;
 import com.example.studentmanager.database.repositories.StudentRepository;
+import com.example.studentmanager.database.repositories.StudentSubjectCrossrefRepository;
+import com.example.studentmanager.database.repositories.SubjectRepository;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -29,11 +33,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class StudentRegistrationFragment extends Fragment {
 
     private StudentRepository studrepository;
+    private SubjectRepository subjectRepository;
+    private StudentSubjectCrossrefRepository studentSubjectCrossrefRepository;
+
     private final AsyncTaskRunner taskRunner=new AsyncTaskRunner();
     private EditText studentnName;
     private EditText studentEmail;
@@ -138,10 +146,13 @@ public class StudentRegistrationFragment extends Fragment {
             Callback<Long> callback=new Callback<Long>() {
                 @Override
                 public void runResultOnUIThread(Long result) {
+                    // Add this student as participant to all available subjects
+                    student.setIdStud(result.intValue());
+                    addStudentToSubjects(student);
+
                     Bundle bundle=new Bundle();
                     bundle.putString("role","student");
                     Navigation.findNavController(v).navigate(R.id.loginFragment,bundle);
-
                 }
             };
             taskRunner.executeAsync(callable,callback);
@@ -149,15 +160,14 @@ public class StudentRegistrationFragment extends Fragment {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         studrepository=new StudentRepository(getContext());
-
+        studrepository=new StudentRepository(getContext());
+        studentSubjectCrossrefRepository = new StudentSubjectCrossrefRepository(getContext());
+        subjectRepository = new SubjectRepository(getContext());
     }
 
     @Override
@@ -165,5 +175,21 @@ public class StudentRegistrationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_student_registration, container, false);
+    }
+
+    private void addStudentToSubjects(Student student) {
+        // Get all subjects from DB
+        Callable<List<Subject>> retrieveSubjectsCallable = () -> subjectRepository.getAll();
+        Callback<List<Subject>> retrieveSubjectsCallback = (List<Subject> subjects) -> {
+            // Bind student to all subjects
+            for (Subject subject : subjects) {
+                StudentSubjectCrossRef crossRef = new StudentSubjectCrossRef(student.getIdStud(), subject.getIdSubject(), 0);
+                Callable<Long> bindCallable = () -> studentSubjectCrossrefRepository.insert(crossRef);
+                Callback<Long> bindCallback = (Long id) -> System.out.println("Bound student to subject");
+                taskRunner.executeAsync(bindCallable, bindCallback);
+            }
+        };
+
+        taskRunner.executeAsync(retrieveSubjectsCallable, retrieveSubjectsCallback);
     }
 }

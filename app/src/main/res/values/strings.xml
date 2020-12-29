@@ -24,4 +24,6 @@
     <string name="diploma">Diploma</string>
     <string name="grade">Grade</string>
     <string name="save">Save</string>
+    <string name="choose_exam_date_for_subject">Choose exam date for subject</string>
+    <string name="update_grade">Update Grade</string>
 </resources>

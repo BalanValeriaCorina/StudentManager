@@ -15,8 +15,8 @@ public class StudentSubjectCrossRef {
 
 
     public StudentSubjectCrossRef(int idStud, int idSubject, double grade) {
-        idStud = idStud;
-        idSubject = idSubject;
+        this.idStud = idStud;
+        this.idSubject = idSubject;
         this.grade = grade;
     }
 
@@ -25,7 +25,7 @@ public class StudentSubjectCrossRef {
     }
 
     public void setIdStud(int idStud) {
-        idStud = idStud;
+        this.idStud = idStud;
     }
 
     public int getIdSubject() {

@@ -1,15 +1,20 @@
 package com.example.studentmanager.database.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.studentmanager.database.utils.DateConverter;
+
 import java.util.Date;
 
 @Entity(tableName = "subjects",indices = {@Index(value = {"subjectName"},unique = true)})
-public class Subject {
+public class Subject implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "idSubject")
@@ -47,6 +52,16 @@ public class Subject {
         this.numberOfTests = numberOfTests;
     }
 
+    private Subject(Parcel source)
+    {
+        idSubject=source.readInt();
+        subjectName=source.readString();
+        subjectDateExam=DateConverter.fromString(source.readString());
+        idProfesorSubject=source.readInt();
+        numberOfTests=source.readInt();
+
+    }
+
     public int getNumberOfTests() {
         return numberOfTests;
     }
@@ -62,6 +77,18 @@ public class Subject {
     public void setIdProfesorSubject(int idProfesorSubject) {
         this.idProfesorSubject = idProfesorSubject;
     }
+
+    public static  Creator<Subject> CREATOR=new Creator<Subject>() {
+        @Override
+        public Subject createFromParcel(Parcel source) {
+            return new Subject(source);
+        }
+
+        @Override
+        public Subject[] newArray(int size) {
+            return new Subject[size];
+        }
+    };
 
     public Date getSubjectDateExam() {
         return subjectDateExam;
@@ -96,5 +123,22 @@ public class Subject {
                 ", idProfesorSubject=" + idProfesorSubject +
                 ", numberOfTests=" + numberOfTests +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(idSubject);
+        dest.writeString(subjectName);
+        dest.writeString(DateConverter.fromDate(subjectDateExam));
+        dest.writeInt(idProfesorSubject);
+        dest.writeInt(numberOfTests);
+
+
     }
 }

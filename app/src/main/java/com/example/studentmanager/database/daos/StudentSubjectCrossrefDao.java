@@ -33,5 +33,9 @@ public interface StudentSubjectCrossrefDao {
     @Query("select * from students")
     List<StudentWithSubjects> getStudentWithSubjects();
 
+    @Query("select * from studentSubjectCross where idSubject=:id")
+    List<StudentSubjectCrossRef> getStudentsRefInSubject(int id);
 
+    @Query("select * from studentSubjectCross where idStud=:id")
+    List<StudentSubjectCrossRef> getSubjectsRefForStudent(int id);
 }

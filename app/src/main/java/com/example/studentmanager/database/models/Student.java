@@ -10,7 +10,7 @@ import java.util.Date;
 
 ;
 
-@Entity(tableName = "students",indices={@Index(value = {"numarMatricol"},unique = true)})
+@Entity(tableName = "students",indices={@Index(value = {"emailStudent"},unique = true)})
 public class Student {
 
     @PrimaryKey(autoGenerate = true)
@@ -124,7 +124,7 @@ public class Student {
     }
 
     public void setIdStud(int idStud) {
-        idStud = idStud;
+        this.idStud = idStud;
     }
 
     @Override

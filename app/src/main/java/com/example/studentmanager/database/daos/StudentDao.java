@@ -29,4 +29,7 @@ public interface StudentDao {
 
     @Query("select * from students where emailStudent=:email")
     Student getStudent(String email);
+
+    @Query("select * from students where idStud=:id")
+    Student getStudentByID(int id);
 }

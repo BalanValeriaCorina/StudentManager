@@ -15,6 +15,7 @@ import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,6 +32,8 @@ import com.example.studentmanager.database.repositories.StudentRepository;
 import com.example.studentmanager.database.repositories.SubjectRepository;
 import com.example.studentmanager.profile.adapters.SpinnerAdapter;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -57,6 +60,7 @@ public class StudentProfileFragment extends Fragment {
     private Button editButton;
     private Button deleteButton;
     private Button logoutButton;
+    private Subject selectedSubject;
 
     public StudentProfileFragment() {
         // Required empty public constructor
@@ -105,6 +109,25 @@ public class StudentProfileFragment extends Fragment {
         editButton.setOnClickListener(v -> {
             performNavigationToUpdateFragment(view);
         });
+
+        subjectsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedSubject = (Subject)parent.getItemAtPosition(position);
+                if(!selectedSubject.getSubjectName().equals("select a subject"))
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("subject", selectedSubject);
+                    Navigation.findNavController(view).navigate(R.id.studentSubjectFragment, bundle);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void displayDataFromDB() {
@@ -133,7 +156,14 @@ public class StudentProfileFragment extends Fragment {
     private void displaySpinnerData() {
         Callable<List<Subject>> callable = () -> subjectRepository.getAll();
         Callback<List<Subject>> callback = (List<Subject> subjects) -> {
-            SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getContext(), R.layout.custom_spinner_subjects, subjects);
+            Subject nousub=new Subject("select a subject",new Date(),0);
+            ArrayList<Subject> arraysub=new ArrayList<>();
+            arraysub.add(nousub);
+            for(int i=0;i<subjects.size();i++)
+            {
+                arraysub.add(subjects.get(i));
+            }
+            SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getContext(), R.layout.custom_spinner_subjects, arraysub);
             subjectsSpinner.setAdapter(spinnerAdapter);
         };
         asyncTaskRunner.executeAsync(callable, callback);

@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_profesorProfileFragment_to_updateProfesorFragment"
             app:destination="@id/updateProfesorFragment" />
+        <action
+            android:id="@+id/action_profesorProfileFragment_to_profesorSubjectFragment"
+            app:destination="@id/profesorSubjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfesorFragment"
         android:name="com.example.studentmanager.profile.UpdateProfesorFragment"
         android:label="fragment_update_profesor"
         tools:layout="@layout/fragment_update_profesor" />
+    <fragment
+        android:id="@+id/profesorSubjectFragment"
+        android:name="com.example.studentmanager.profile.ProfesorSubjectFragment"
+        android:label="fragment_profesor_subject"
+        tools:layout="@layout/fragment_profesor_subject" />
 </navigation>

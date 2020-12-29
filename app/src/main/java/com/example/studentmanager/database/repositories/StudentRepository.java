@@ -38,6 +38,10 @@ public class StudentRepository {
         return studentDao.getStudent(email);
     }
 
+    public Student getStudentByID(int id) {
+        return studentDao.getStudentByID(id);
+    }
+
 
 //    public void  getAll() {
 //        Callable<List<Student>> callable=new Callable<List<Student>>() {

@@ -46,7 +46,7 @@ public class SpinnerAdapter extends ArrayAdapter<Subject> {
             case "Multiparadigm programming Java":
                 return R.drawable.hack;
         }
-        return  R.drawable.android;
+        return  R.color.white;
     }
 
 

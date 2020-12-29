@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ import com.example.studentmanager.database.models.Subject;
 import com.example.studentmanager.database.repositories.ProfesorRepository;
 import com.example.studentmanager.database.repositories.SubjectRepository;
 import com.example.studentmanager.profile.adapters.SpinnerAdapter;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -44,6 +48,8 @@ public class ProfesorProfileFragment extends Fragment {
     private String email;
     private Button deleteteacherbtn;
     private Button updateprofile;
+
+    private Subject selectedSubject;
 
     public ProfesorProfileFragment() {
         // Required empty public constructor
@@ -72,6 +78,26 @@ public class ProfesorProfileFragment extends Fragment {
         });
         getProfesorFromDatabase();
         populateSpinner();
+
+        spinnerteacher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedSubject = (Subject)parent.getItemAtPosition(position);
+                if(!selectedSubject.getSubjectName().equals("select a subject"))
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("subject", selectedSubject);
+                    Navigation.findNavController(view).navigate(R.id.profesorSubjectFragment, bundle);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         deleteteacherbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +218,14 @@ public class ProfesorProfileFragment extends Fragment {
                 Callback<List<Subject>> callback=new Callback<List<Subject>>() {
                     @Override
                     public void runResultOnUIThread(List<Subject> result) {
-                        spinnerAdapter=new SpinnerAdapter(getContext(),R.layout.custom_spinner_subjects,result);
+                        Subject nousub=new Subject("select a subject",new Date(),0);
+                        ArrayList<Subject> arraysub=new ArrayList<>();
+                        arraysub.add(nousub);
+                        for(int i=0;i<result.size();i++)
+                        {
+                            arraysub.add(result.get(i));
+                        }
+                        spinnerAdapter=new SpinnerAdapter(getContext(),R.layout.custom_spinner_subjects,arraysub);
                         spinnerteacher.setAdapter(spinnerAdapter);
                     }
                 };

@@ -46,6 +46,11 @@ public class StudentSubjectCrossrefRepository {
         return studentSubjectCrossrefDao.delete(pd);
     }
 
+    public List<StudentSubjectCrossRef> getStudentsRefInSubject(int id) {
+        return studentSubjectCrossrefDao.getStudentsRefInSubject(id);
+    }
 
-
+    public List<StudentSubjectCrossRef> getSubjectsRefForStudent(int id) {
+        return studentSubjectCrossrefDao.getSubjectsRefForStudent(id);
+    }
 }
