@@ -53,4 +53,8 @@ public class StudentSubjectCrossrefRepository {
     public List<StudentSubjectCrossRef> getSubjectsRefForStudent(int id) {
         return studentSubjectCrossrefDao.getSubjectsRefForStudent(id);
     }
+
+    public StudentSubjectCrossRef getRef(int idStud, int idSubject) {
+        return studentSubjectCrossrefDao.getRef(idStud, idSubject);
+    }
 }

@@ -30,6 +30,11 @@ public class ProfesorRepository {
     {
         return profesorDao.getProfesor(email);
     }
+
+    public Profesor getProfessorByID(int id) {
+        return profesorDao.getProfessorByID(id);
+    }
+
 //    public void  getAll() {
 //        Callable<List<Profesor>> callable=new Callable<List<Profesor>>() {
 //            @Override

@@ -2,59 +2,66 @@ package com.example.studentmanager.profile;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.studentmanager.R;
+import com.example.studentmanager.async.AsyncTaskRunner;
+import com.example.studentmanager.async.Callback;
+import com.example.studentmanager.database.models.Profesor;
+import com.example.studentmanager.database.models.Student;
+import com.example.studentmanager.database.models.StudentSubjectCrossRef;
+import com.example.studentmanager.database.models.Subject;
+import com.example.studentmanager.database.repositories.ProfesorRepository;
+import com.example.studentmanager.database.repositories.StudentRepository;
+import com.example.studentmanager.database.repositories.StudentSubjectCrossrefRepository;
+import com.example.studentmanager.database.repositories.SubjectRepository;
+import com.example.studentmanager.database.utils.DateConverter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StudentSubjectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.concurrent.Callable;
+
 public class StudentSubjectFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private StudentSubjectCrossrefRepository studentSubjectCrossrefRepository;
+    private SubjectRepository subjectRepository;
+    private ProfesorRepository profesorRepository;
+    private StudentRepository studentRepository;
+    private final AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Subject currentSubject;
+    private String studentEmail;
+
+    private TextView subjectName;
+    private TextView professorName;
+    private TextView professorEmail;
+    private TextView subjectExamDate;
+    private TextView subjectGrade;
 
     public StudentSubjectFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StudentSubjectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StudentSubjectFragment newInstance(String param1, String param2) {
-        StudentSubjectFragment fragment = new StudentSubjectFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static StudentSubjectFragment newInstance() {
+        return new StudentSubjectFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        assert getArguments() != null;
+        currentSubject = getArguments().getParcelable("subject");
+        studentEmail = getArguments().getString("email", "");
+
+        studentSubjectCrossrefRepository = new StudentSubjectCrossrefRepository(getContext());
+        subjectRepository = new SubjectRepository(getContext());
+        studentRepository = new StudentRepository(getContext());
+        profesorRepository = new ProfesorRepository(getContext());
     }
 
     @Override
@@ -62,5 +69,63 @@ public class StudentSubjectFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_student_subject, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize components
+        initializeComponents(view);
+
+        // Populate fragment view with data from DB
+        displayData();
+    }
+
+    private void initializeComponents(View view) {
+        subjectName = view.findViewById(R.id.student_subject_name_tv);
+        professorName = view.findViewById(R.id.student_subject_prof_name_tv);
+        professorEmail = view.findViewById(R.id.student_subject_prof_email_tv);
+        subjectExamDate = view.findViewById(R.id.student_subject_exam_date_tv);
+        subjectGrade = view.findViewById(R.id.student_subject_grade_tv);
+    }
+
+    private void displayData() {
+        // Get data about the professor
+        displayProfessorData();
+
+        // Get data about the subject
+        displaySubjectData();
+
+        // Get data about grade
+        displayRefData();
+    }
+
+    private void displayProfessorData() {
+        int professorID = currentSubject.getIdProfesorSubject();
+        Callable<Profesor> callable = () -> profesorRepository.getProfessorByID(professorID);
+        Callback<Profesor> callback = (Profesor p) -> {
+            professorName.setText(p.getNameProfesor());
+            professorEmail.setText(p.getEmailProfesor());
+        };
+        asyncTaskRunner.executeAsync(callable, callback);
+    }
+
+    private void displaySubjectData() {
+        subjectExamDate.setText(DateConverter.fromDate(currentSubject.getSubjectDateExam()));
+        subjectName.setText(currentSubject.getSubjectName());
+    }
+
+    private void displayRefData() {
+        // Get the student by email to obtain his ID
+        Callable<Student> studentCallable = () -> studentRepository.getStudent(studentEmail);
+        Callback<Student> studentCallback = (Student student) -> {
+            Callable<StudentSubjectCrossRef> refCallable = () -> studentSubjectCrossrefRepository.getRef(student.getIdStud(), currentSubject.getIdSubject());
+            Callback<StudentSubjectCrossRef> refCallback = (StudentSubjectCrossRef ref) -> {
+                subjectGrade.setText("Grade: " + ref.getGrade());
+            };
+            asyncTaskRunner.executeAsync(refCallable, refCallback);
+        };
+        asyncTaskRunner.executeAsync(studentCallable, studentCallback);
     }
 }

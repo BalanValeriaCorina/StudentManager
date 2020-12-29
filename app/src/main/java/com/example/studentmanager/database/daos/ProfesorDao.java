@@ -36,4 +36,6 @@ public interface ProfesorDao {
     @Query("select * from profesors where emailProfesor=:email")
     Profesor getProfesor(String email);
 
+    @Query("select * from profesors where idProfesor=:id")
+    Profesor getProfessorByID(int id);
 }

@@ -118,6 +118,7 @@ public class StudentProfileFragment extends Fragment {
                 {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("subject", selectedSubject);
+                    bundle.putString("email", email);
                     Navigation.findNavController(view).navigate(R.id.studentSubjectFragment, bundle);
                 }
 
