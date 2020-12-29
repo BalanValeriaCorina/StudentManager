@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +40,10 @@ public class ProfesorProfileFragment extends Fragment {
     private TextView diplomateacher;
     private Spinner spinnerteacher;
     private SpinnerAdapter spinnerAdapter;
-    private Profesor profesor;
     private AsyncTaskRunner asyncTaskRunner=new AsyncTaskRunner();
+    private String email;
+    private Button deleteteacherbtn;
+    private Button updateprofile;
 
     public ProfesorProfileFragment() {
         // Required empty public constructor
@@ -55,8 +58,8 @@ public class ProfesorProfileFragment extends Fragment {
         emailteacher=view.findViewById(R.id.tvemailteacher);
         diplomateacher=view.findViewById(R.id.tvdiploma);
         spinnerteacher=view.findViewById(R.id.spinnerteacher1);
-
-
+        deleteteacherbtn=view.findViewById(R.id.btndeleteteacher);
+        updateprofile=view.findViewById(R.id.btnupdate);
 
         logoutteacher.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +73,65 @@ public class ProfesorProfileFragment extends Fragment {
         getProfesorFromDatabase();
         populateSpinner();
 
+        deleteteacherbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteProfile();
+            }
+        });
+
+        updateprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putString("email",email);
+                Navigation.findNavController(v).navigate(R.id.updateProfesorFragment,bundle);
+            }
+        });
+
     }
+
+    private void deleteProfile()
+    {
+        ProfesorRepository profesorRepository=new ProfesorRepository(getContext());
+
+        Callable<Profesor> profesorCallable = new Callable<Profesor>() {
+            @Override
+            public Profesor call() throws Exception {
+                return profesorRepository.getProfesor(email);
+            }
+        };
+        Callback<Profesor> profesorCallback = new Callback<Profesor>() {
+            @Override
+            public void runResultOnUIThread(Profesor result) {
+                Callable<Integer> callable=new Callable<Integer>() {
+                    @Override
+                    public Integer call() throws Exception {
+                        return profesorRepository.delete(result);
+                    }
+                };
+                Callback<Integer> callback=new Callback<Integer>() {
+                    @Override
+                    public void runResultOnUIThread(Integer result) {
+
+                        sharedPreferences.edit().clear().apply();
+                        Intent intent=new Intent(getContext(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                };
+                asyncTaskRunner.executeAsync(callable,callback);
+            }
+        };
+        asyncTaskRunner.executeAsync(profesorCallable, profesorCallback);
+
+    }
+
+
+
 
     private void getProfesorFromDatabase()
     {
-        String email;
         Intent intent=getActivity().getIntent();
         Bundle bundle=intent.getExtras();
         if(bundle!=null)
@@ -86,16 +143,14 @@ public class ProfesorProfileFragment extends Fragment {
             email="";
         }
 
-        if(email!="")
+        if(!email.equals(""))
         {
-            AsyncTaskRunner asyncTaskRunner=new AsyncTaskRunner();
             ProfesorRepository profesorRepository=new ProfesorRepository(getContext());
             Callable<Profesor> callable=new Callable<Profesor>() {
                 @Override
                 public Profesor call() throws Exception {
                     return profesorRepository.getProfesor(email);
                 }
-
             };
             Callback<Profesor> callback=new Callback<Profesor>() {
                 @Override
@@ -103,8 +158,6 @@ public class ProfesorProfileFragment extends Fragment {
                     teachername.setText(result.getName());
                     emailteacher.setText(result.getEmail());
                     diplomateacher.setText(result.getDiploma().getDiplomaName());
-                    profesor=result;
-
                 }
             };
             asyncTaskRunner.executeAsync(callable,callback);
@@ -116,26 +169,37 @@ public class ProfesorProfileFragment extends Fragment {
         return fragment;
     }
 
-
     public void populateSpinner()
     {
         SubjectRepository subjectRepository=new SubjectRepository(getContext());
+        ProfesorRepository profesorRepository = new ProfesorRepository(getContext());
 
-        Callable<List<Subject>> callable=new Callable<List<Subject>>() {
+        Callable<Profesor> profesorCallable = new Callable<Profesor>() {
             @Override
-            public List<Subject> call() throws Exception {
-                return subjectRepository.getProfesorSubjects(profesor.getIdProfesor());
+            public Profesor call() throws Exception {
+                return profesorRepository.getProfesor(email);
             }
         };
-        Callback<List<Subject>> callback=new Callback<List<Subject>>() {
+        Callback<Profesor> profesorCallback = new Callback<Profesor>() {
             @Override
-            public void runResultOnUIThread(List<Subject> result) {
-                spinnerAdapter=new SpinnerAdapter(getContext(),R.layout.custom_spinner_subjects,result);
-                spinnerteacher.setAdapter(spinnerAdapter);
-
+            public void runResultOnUIThread(Profesor result) {
+                Callable<List<Subject>> callable=new Callable<List<Subject>>() {
+                    @Override
+                    public List<Subject> call() throws Exception {
+                        return subjectRepository.getProfesorSubjects(result.getIdProfesor());
+                    }
+                };
+                Callback<List<Subject>> callback=new Callback<List<Subject>>() {
+                    @Override
+                    public void runResultOnUIThread(List<Subject> result) {
+                        spinnerAdapter=new SpinnerAdapter(getContext(),R.layout.custom_spinner_subjects,result);
+                        spinnerteacher.setAdapter(spinnerAdapter);
+                    }
+                };
+                asyncTaskRunner.executeAsync(callable,callback);
             }
         };
-        asyncTaskRunner.executeAsync(callable,callback);
+        asyncTaskRunner.executeAsync(profesorCallable, profesorCallback);
     }
 
 

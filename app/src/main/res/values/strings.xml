@@ -20,4 +20,8 @@
     <string name="delete">Delete</string>
     <string name="log_out">Log out</string>
     <string name="delete_profile">Delete Profile</string>
+    <string name="update_profile">Update profile</string>
+    <string name="diploma">Diploma</string>
+    <string name="grade">Grade</string>
+    <string name="save">Save</string>
 </resources>

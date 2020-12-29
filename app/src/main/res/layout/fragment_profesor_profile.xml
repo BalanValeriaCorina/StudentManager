@@ -60,11 +60,11 @@
 
     </LinearLayout>
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnupdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="56dp"
-        android:text="Button"
+        android:text="@string/update_profile"
         app:layout_constraintBottom_toTopOf="@+id/spinnerteacher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintTop_toBottomOf="@id/tvemailteacher"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/btnupdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent" />
