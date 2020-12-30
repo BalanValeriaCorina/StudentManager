@@ -26,4 +26,9 @@
     <string name="save">Save</string>
     <string name="choose_exam_date_for_subject">Choose exam date for subject</string>
     <string name="update_grade">Update Grade</string>
+    <string name="view_grade_sheet">View Grade Sheet</string>
+    <string name="welcome">Welcome</string>
+    <string name="hi">Hi</string>
+    <string name="welcome_to_your_grade_sheet">Welcome to your grade sheet</string>
+    <string name="export_this_report">Export this report</string>
 </resources>

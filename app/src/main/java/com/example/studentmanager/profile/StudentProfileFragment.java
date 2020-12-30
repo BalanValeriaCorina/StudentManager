@@ -60,6 +60,8 @@ public class StudentProfileFragment extends Fragment {
     private Button editButton;
     private Button deleteButton;
     private Button logoutButton;
+    private Button reportButton;
+
     private Subject selectedSubject;
 
     public StudentProfileFragment() {
@@ -108,6 +110,10 @@ public class StudentProfileFragment extends Fragment {
 
         editButton.setOnClickListener(v -> {
             performNavigationToUpdateFragment(view);
+        });
+
+        reportButton.setOnClickListener(v -> {
+            performNavigationToGradeSheetFragment(view);
         });
 
         subjectsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -207,6 +213,12 @@ public class StudentProfileFragment extends Fragment {
         Navigation.findNavController(view).navigate(R.id.updateStudentFragment, bundle);
     }
 
+    private void performNavigationToGradeSheetFragment(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("email", email);
+        Navigation.findNavController(view).navigate(R.id.studentGradeSheetFragment, bundle);
+    }
+
     private void initComponents(View view) {
         nameTextView = view.findViewById(R.id.student_profile_name_tv);
         emailTextView = view.findViewById(R.id.student_profile_email_tv);
@@ -219,5 +231,6 @@ public class StudentProfileFragment extends Fragment {
         editButton = view.findViewById(R.id.student_edit_profile);
         deleteButton = view.findViewById(R.id.student_delete_profile);
         logoutButton = view.findViewById(R.id.student_logout_profile);
+        reportButton = view.findViewById(R.id.student_profile_report_btn);
     }
 }

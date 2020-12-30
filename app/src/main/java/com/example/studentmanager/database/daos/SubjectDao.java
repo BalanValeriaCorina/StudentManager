@@ -27,4 +27,7 @@ public interface SubjectDao {
 
     @Query("select * from subjects where idProfesorSubject=:id")
     List<Subject> getProfesorSubjects(int id);
+
+    @Query("select * from subjects where idSubject=:id")
+    Subject getSubjectByID(int id);
 }

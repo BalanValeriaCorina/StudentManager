@@ -64,4 +64,7 @@ public class SubjectRepository {
         return subjectDao.getProfesorSubjects(id);
     }
 
+    public Subject getSubjectByID(int id) {
+        return subjectDao.getSubjectByID(id);
+    }
 }
