@@ -26,5 +26,14 @@
         android:id="@+id/profesorSubjectFragment"
         android:name="com.example.studentmanager.profile.ProfesorSubjectFragment"
         android:label="fragment_profesor_subject"
-        tools:layout="@layout/fragment_profesor_subject" />
+        tools:layout="@layout/fragment_profesor_subject" >
+        <action
+            android:id="@+id/action_profesorSubjectFragment_to_chartFragment"
+            app:destination="@id/chartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.example.studentmanager.profile.ChartFragment"
+        android:label="fragment_chart"
+        tools:layout="@layout/fragment_chart" />
 </navigation>

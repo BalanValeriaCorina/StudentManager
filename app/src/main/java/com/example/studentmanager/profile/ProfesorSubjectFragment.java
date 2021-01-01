@@ -5,12 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class ProfesorSubjectFragment extends Fragment {
 
     private CalendarView examCalendarView;
     private RecyclerView studentsRecyclerView;
+    private Button chartButton;
 
     public ProfesorSubjectFragment() {
         // Required empty public constructor
@@ -71,6 +74,7 @@ public class ProfesorSubjectFragment extends Fragment {
 
         examCalendarView = view.findViewById(R.id.profesor_subject_date_picker);
         studentsRecyclerView = view.findViewById(R.id.profesor_subject_recycler);
+        chartButton = view.findViewById(R.id.chart_btn);
 
         // Add data to recyclerView
         populateRecyclerView();
@@ -85,6 +89,10 @@ public class ProfesorSubjectFragment extends Fragment {
             Date date = calendar.getTime();
             currentSubject.setSubjectDateExam(date);
             changeExamDateForSubject(currentSubject);
+        });
+
+        chartButton.setOnClickListener(v -> {
+            performNavigationToChartFragment(view);
         });
     }
 
@@ -103,6 +111,34 @@ public class ProfesorSubjectFragment extends Fragment {
         Callback<Integer> callback = (Integer nr) -> {
             System.out.println("Exam Date changed");
             Toast.makeText(getContext(), "Exam Date Saved", Toast.LENGTH_SHORT).show();
+        };
+        asyncTaskRunner.executeAsync(callable, callback);
+    }
+
+    private void performNavigationToChartFragment(View view) {
+        // Get the grade data
+        Callable<List<StudentSubjectCrossRef>> callable = () -> studentSubjectCrossrefRepository.getStudentsRefInSubject(currentSubject.getIdSubject());
+        Callback<List<StudentSubjectCrossRef>> callback = (List<StudentSubjectCrossRef> crossRefList) -> {
+            // sort the data
+            int passed = 0;
+            int failed = 0;
+            int ungraded = 0;
+            for (StudentSubjectCrossRef ref : crossRefList) {
+                if(ref.getGrade() == 0) {
+                    ungraded ++;
+                }
+                else if (ref.getGrade() < 5) {
+                    failed++;
+                } else {
+                    passed++;
+                }
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("passed", passed);
+            bundle.putInt("failed", failed);
+            bundle.putInt("ungraded", ungraded);
+            Navigation.findNavController(view).navigate(R.id.chartFragment, bundle);
         };
         asyncTaskRunner.executeAsync(callable, callback);
     }
