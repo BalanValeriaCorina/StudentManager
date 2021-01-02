@@ -158,16 +158,7 @@ public class ProfesorProfileFragment extends Fragment {
 
     private void getProfesorFromDatabase()
     {
-        Intent intent=getActivity().getIntent();
-        Bundle bundle=intent.getExtras();
-        if(bundle!=null)
-        {
-            email=bundle.getString("email");
-        }
-        else
-        {
-            email="";
-        }
+
 
         if(!email.equals(""))
         {
@@ -239,6 +230,16 @@ public class ProfesorProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent=getActivity().getIntent();
+        Bundle bundle=intent.getExtras();
+        if(bundle!=null)
+        {
+            email=bundle.getString("email");
+        }
+        else
+        {
+            email="";
+        }
 
     }
 

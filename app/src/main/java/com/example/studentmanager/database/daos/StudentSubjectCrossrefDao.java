@@ -16,7 +16,7 @@ import java.util.List;
 @Dao
 public interface StudentSubjectCrossrefDao {
 
-    @Transaction
+    @Transaction//nu l am folosit
     @Query("select * from subjects")
     List<SubjectWithStudents> getSubjectsWithStudents();
 

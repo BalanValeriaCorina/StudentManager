@@ -43,5 +43,5 @@ public abstract class DatabaseManager extends RoomDatabase {
 public abstract SubjectDao getSubjectDao();
 public abstract StudentDao getStudentDao();
 public abstract StudentSubjectCrossrefDao getStudentSubjectCrossrefDao();
-public  abstract ProfesorDao getProfesorDao();
+public abstract ProfesorDao getProfesorDao();
 }
