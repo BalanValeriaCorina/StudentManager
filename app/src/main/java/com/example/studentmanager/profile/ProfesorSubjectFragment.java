@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,18 @@ import android.widget.Toast;
 import com.example.studentmanager.R;
 import com.example.studentmanager.async.AsyncTaskRunner;
 import com.example.studentmanager.async.Callback;
+import com.example.studentmanager.database.models.Student;
 import com.example.studentmanager.database.models.StudentSubjectCrossRef;
 import com.example.studentmanager.database.models.Subject;
+import com.example.studentmanager.database.repositories.StudentRepository;
 import com.example.studentmanager.database.repositories.StudentSubjectCrossrefRepository;
 import com.example.studentmanager.database.repositories.SubjectRepository;
 import com.example.studentmanager.profile.adapters.StudentSubjectAdapter;
+import com.opencsv.CSVWriter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +44,13 @@ public class ProfesorSubjectFragment extends Fragment {
 
     private StudentSubjectCrossrefRepository studentSubjectCrossrefRepository;
     private SubjectRepository subjectRepository;
+    private StudentRepository studentRepository;
     private final AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
 
     private CalendarView examCalendarView;
     private RecyclerView studentsRecyclerView;
     private Button chartButton;
+    private Button exportreport;
 
     public ProfesorSubjectFragment() {
         // Required empty public constructor
@@ -57,6 +66,7 @@ public class ProfesorSubjectFragment extends Fragment {
         assert getArguments() != null;
         currentSubject = getArguments().getParcelable("subject");
 
+        studentRepository=new StudentRepository(getContext());
         studentSubjectCrossrefRepository = new StudentSubjectCrossrefRepository(getContext());
         subjectRepository = new SubjectRepository(getContext());
     }
@@ -75,7 +85,7 @@ public class ProfesorSubjectFragment extends Fragment {
         examCalendarView = view.findViewById(R.id.profesor_subject_date_picker);
         studentsRecyclerView = view.findViewById(R.id.profesor_subject_recycler);
         chartButton = view.findViewById(R.id.chart_btn);
-
+        exportreport=view.findViewById(R.id.export_teacher);
         // Add data to recyclerView
         populateRecyclerView();
 
@@ -94,7 +104,80 @@ public class ProfesorSubjectFragment extends Fragment {
         chartButton.setOnClickListener(v -> {
             performNavigationToChartFragment(view);
         });
+
+        exportreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                exportReport();
+            }
+        });
+
     }
+
+    private void exportReport()
+    {
+        Callable<List<StudentSubjectCrossRef>> callable=new Callable<List<StudentSubjectCrossRef>>() {
+            @Override
+            public List<StudentSubjectCrossRef> call() throws Exception {
+                return studentSubjectCrossrefRepository.getStudentsRefInSubject(currentSubject.getIdSubject());
+            }
+        };
+
+        Callback<List<StudentSubjectCrossRef>> callback=new Callback<List<StudentSubjectCrossRef>>() {
+            @Override
+            public void runResultOnUIThread(List<StudentSubjectCrossRef> result) {
+
+                File exportDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!exportDir.exists()) {
+                    exportDir.mkdirs();
+                }
+
+                File file = new File(exportDir, "studentReport.csv");
+                try {
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                for(StudentSubjectCrossRef ref : result) {
+                    Callable<Student> studentCallable = () -> studentRepository.getStudentByID(ref.getIdStud());
+                    Callback<Student> studentCallback = (Student student) -> {
+
+                        FileWriter fileWriter = null;
+                        try {
+                            fileWriter = new FileWriter(file, true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        // 4. Write to CSV file
+                        CSVWriter csvWriter = new CSVWriter(fileWriter);
+                        String[] data = new String[2];
+                        data[0] = student.getNumeStudent();
+                        data[1] = Double.valueOf(ref.getGrade()).toString();
+                        synchronized (csvWriter) {
+                            csvWriter.writeNext(data, true);
+                        }
+
+                        try {
+                            csvWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    };
+                    asyncTaskRunner.executeAsync(studentCallable, studentCallback);
+                }
+            }
+        };
+
+        asyncTaskRunner.executeAsync(callable,callback);
+
+    }
+
 
     private void populateRecyclerView() {
         Callable<List<StudentSubjectCrossRef>> callable = () -> studentSubjectCrossrefRepository.getStudentsRefInSubject(currentSubject.getIdSubject());

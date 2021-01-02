@@ -164,6 +164,7 @@ public class StudentGradeSheetFragment extends Fragment {
                         synchronized (csvWriter) {
                             csvWriter.writeNext(data, true);
                         }
+
                         try {
                             csvWriter.close();
                         } catch (IOException e) {
@@ -172,6 +173,7 @@ public class StudentGradeSheetFragment extends Fragment {
                     };
                     asyncTaskRunner.executeAsync(subjectCallable, subjectCallback);
                 }
+
                 Toast.makeText(getContext(), "File saved at " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
             };
             asyncTaskRunner.executeAsync(listCallable, listCallback);
