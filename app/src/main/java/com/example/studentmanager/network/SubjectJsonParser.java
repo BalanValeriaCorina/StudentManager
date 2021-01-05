@@ -1,5 +1,7 @@
 package com.example.studentmanager.network;
 
+import android.os.Build;
+
 import com.example.studentmanager.database.models.Diploma;
 import com.example.studentmanager.database.models.Profesor;
 import com.example.studentmanager.database.models.Subject;
@@ -96,7 +98,9 @@ public class SubjectJsonParser {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        md.update(pass.getBytes(StandardCharsets.UTF_8));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            md.update(pass.getBytes(StandardCharsets.UTF_8));
+        }
         byte[] digest=md.digest();//will create the hash and put it into a byte array
         String hashedPassword=String.format("%064x",new BigInteger(1,digest));
 
